@@ -7,6 +7,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Slider from './screens/Slider';
 import Menu from './screens/Menu';
 import VideoShow from './screens/VideoShow';
+import VideoUpload from './screens/VideoUpload';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
         <Stack.Screen name="Slider" component={Slider} />
         <Stack.Screen name="Menu" component={Menu} />
         <Stack.Screen name="VideoShow" component={VideoShow} />
+        <Stack.Screen name="VideoUpload" component={VideoUpload} />
       </Stack.Navigator>
     </NavigationContainer>
   );

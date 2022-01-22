@@ -73,7 +73,7 @@ const Slider = props => {
             text="Get Started"
             color="#6C63FF"
             onPress={() => {
-              props.navigation.navigate('VideoShow');
+              props.navigation.navigate('VideoUpload');
             }}
           />
         </View>
