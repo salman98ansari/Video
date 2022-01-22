@@ -72,6 +72,14 @@ const VideoShow = () => {
             </View>
           </TouchableOpacity>
         </View>
+        <View style={styles.captioncontainer}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{fontWeight: 'bold', color: '#000'}}>
+              salman.ansari :
+            </Text>
+            <Text style={{color: '#000', marginLeft: 5}}>Caption</Text>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -112,5 +120,15 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 10,
+  },
+  captioncontainer: {
+    width: '100%',
+    // borderWidth: 0.5,
+    borderBottomWidth: 0.5,
+    borderLeftWidth: 0.5,
+    borderRightWidth: 0.5,
+    borderRadius: 10,
+    justifyContent: 'center',
+    padding: 10,
   },
 });
