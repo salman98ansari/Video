@@ -36,7 +36,7 @@ const VideoUpload = props => {
     })
       .then(video => {
         console.log(video, 'in then');
-        setUploadvideo([...uploadvideo, video.uri]);
+        setUploadvideo([...uploadvideo, video]);
       })
       .catch(err => {
         console.log(err);
@@ -58,7 +58,9 @@ const VideoUpload = props => {
         <Button
           title="videoshow"
           onPress={() => {
-            props.navigation.navigate('VideoShow');
+            props.navigation.navigate('VideoShow', {
+              uploadvideo: uploadvideo,
+            });
           }}
         />
       </View>

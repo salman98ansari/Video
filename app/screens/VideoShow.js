@@ -5,7 +5,9 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Vid1 from '../assets/videos/vid1.mp4';
 import Vid2 from '../assets/videos/vid2.mp4';
 
-const VideoShow = () => {
+const VideoShow = props => {
+  const {uploadvideo} = props.route.params || {};
+  console.log(uploadvideo);
   const [volumeon, setVolumeon] = useState(true);
   const [index, setIndex] = useState(0);
 
@@ -27,7 +29,8 @@ const VideoShow = () => {
         </View>
         <View style={styles.videocontainer}>
           <Video
-            source={Vid1}
+            source={{uri: uploadvideo[0].uri}}
+            // source={Vid2}
             style={styles.backgroundVideo}
             repeat
             resizeMode={aspect}
