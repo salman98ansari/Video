@@ -6,20 +6,13 @@ import Vid1 from '../assets/videos/vid1.mp4';
 import Vid2 from '../assets/videos/vid2.mp4';
 
 const VideoShow = props => {
-  const {uploadvideo} = props.route.params || {};
-  console.log(uploadvideo);
+  const {uploadvideo, aspect} = props.route.params || {};
   const [volumeon, setVolumeon] = useState(true);
-  const [index, setIndex] = useState(0);
 
-  const aspect_ratios = ['contain', 'stretch', 'cover'];
-  const [aspect, setAspect] = useState(aspect_ratios[index]);
-
-  const changeaspect = () => {
-    setIndex((index + 1) % aspect_ratios.length);
-    let num = (index + 1) % aspect_ratios.length;
-    const item = aspect_ratios[num];
-    setAspect(item);
-  };
+  // const datas = {
+  //   currentTime: 0,
+  //   duration: 5,
+  // };
 
   return (
     <View style={styles.container}>
@@ -35,24 +28,10 @@ const VideoShow = props => {
             repeat
             resizeMode={aspect}
             volume={volumeon ? 1.0 : 0.0}
+            // onLoad={() => {
+            //   datas;
+            // }}
           />
-          <TouchableOpacity
-            onPress={() => {
-              changeaspect();
-            }}
-            style={{position: 'absolute', bottom: 10, left: 10}}>
-            <View
-              style={{
-                height: 30,
-                width: 30,
-                borderRadius: 15,
-                backgroundColor: '#000',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Icons name="aspect-ratio" size={20} color="#FFF" />
-            </View>
-          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setVolumeon(!volumeon);
