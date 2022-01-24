@@ -115,6 +115,11 @@ const VideoUpload = props => {
                   resizeMode={aspect}
                   volume={volumeon ? 1.0 : 0.0}
                 />
+                <View style={{marginTop: 2}}>
+                  <Text style={{color: 'gray', fontSize: 15}}>
+                    Change Aspect Ratio*
+                  </Text>
+                </View>
                 <TouchableOpacity
                   onPress={() => {
                     changeaspect();
