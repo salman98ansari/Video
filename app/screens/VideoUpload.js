@@ -19,6 +19,8 @@ const VideoUpload = props => {
   const [uploadvideo, setUploadvideo] = useState([]);
   const [modal, setModal] = useState(false);
   const videoPlayer = useRef(null);
+  const [time, setTime] = useState(4);
+  const [pause, setPause] = useState(false);
   // console.log(uploadvideo, 'uploadedddddd');
   const [volumeon, setVolumeon] = useState(true);
 
@@ -119,9 +121,12 @@ const VideoUpload = props => {
                   // onLoad={data => {
                   //   console.log(data.duration);
                   // }}
-                  // onProgress={data => {
-
-                  // }}
+                  paused={pause}
+                  onProgress={data => {
+                    if (data.currentTime > time) {
+                      setPause(true);
+                    }
+                  }}
                 />
                 <View style={{marginTop: 2}}>
                   <Text style={{color: 'gray', fontSize: 15}}>
@@ -175,6 +180,7 @@ const VideoUpload = props => {
                     props.navigation.navigate('VideoShow', {
                       uploadvideo: uploadvideo,
                       aspect: aspect,
+                      time: time,
                     });
                   }}
                 />

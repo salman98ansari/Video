@@ -1,13 +1,22 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import Video from 'react-native-video';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Vid1 from '../assets/videos/vid1.mp4';
 import Vid2 from '../assets/videos/vid2.mp4';
 
 const VideoShow = props => {
-  const {uploadvideo, aspect} = props.route.params || {};
+  const videoRef = useRef(null);
+  const {uploadvideo, aspect, time} = props.route.params || {};
+  console.log(props.route.params);
   const [volumeon, setVolumeon] = useState(true);
+  const [pause, setPause] = useState(false);
+  const [times, setTimes] = useState();
+  const [seek, setSeek] = useState(0);
+
+  useEffect(() => {
+    setTimes(time);
+  }, []);
 
   // const datas = {
   //   currentTime: 0,
@@ -22,15 +31,20 @@ const VideoShow = props => {
         </View>
         <View style={styles.videocontainer}>
           <Video
+            ref={videoRef}
             source={{uri: uploadvideo[0].uri}}
             // source={Vid2}
             style={styles.backgroundVideo}
             repeat
             resizeMode={aspect}
             volume={volumeon ? 1.0 : 0.0}
-            // onLoad={() => {
-            //   datas;
-            // }}
+            paused={pause}
+            onProgress={data => {
+              if (data.currentTime > times) {
+                // setPause(true);
+                videoRef.current.seek(0);
+              }
+            }}
           />
           <TouchableOpacity
             onPress={() => {
