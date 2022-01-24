@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -18,6 +18,7 @@ import Video from 'react-native-video';
 const VideoUpload = props => {
   const [uploadvideo, setUploadvideo] = useState([]);
   const [modal, setModal] = useState(false);
+  const videoPlayer = useRef(null);
   // console.log(uploadvideo, 'uploadedddddd');
   const [volumeon, setVolumeon] = useState(true);
 
@@ -110,10 +111,17 @@ const VideoUpload = props => {
             <>
               <View style={styles.videocontainer}>
                 <Video
+                  ref={ref => (videoPlayer.current = ref)}
                   source={{uri: uploadvideo[0].uri}}
                   style={styles.backgroundVideo}
                   resizeMode={aspect}
                   volume={volumeon ? 1.0 : 0.0}
+                  // onLoad={data => {
+                  //   console.log(data.duration);
+                  // }}
+                  // onProgress={data => {
+
+                  // }}
                 />
                 <View style={{marginTop: 2}}>
                   <Text style={{color: 'gray', fontSize: 15}}>
