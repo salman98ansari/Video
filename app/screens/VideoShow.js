@@ -18,11 +18,6 @@ const VideoShow = props => {
     setTimes(time);
   }, []);
 
-  // const datas = {
-  //   currentTime: 0,
-  //   duration: 5,
-  // };
-
   return (
     <View style={styles.container}>
       <View style={styles.margincontainer}>
@@ -38,7 +33,7 @@ const VideoShow = props => {
             repeat
             resizeMode={aspect}
             volume={volumeon ? 1.0 : 0.0}
-            paused={pause}
+            // paused={pause}
             onProgress={data => {
               if (data.currentTime > times) {
                 // setPause(true);

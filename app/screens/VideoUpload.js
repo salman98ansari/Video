@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -18,14 +18,14 @@ import Video from 'react-native-video';
 const VideoUpload = props => {
   const [uploadvideo, setUploadvideo] = useState([]);
   const [modal, setModal] = useState(false);
-  const videoPlayer = useRef(null);
-  const [time, setTime] = useState(4);
+  const [time, setTime] = useState(0);
   const [pause, setPause] = useState(false);
+  const [duration, setDuration] = useState(0);
+  console.log(duration, time);
   // console.log(uploadvideo, 'uploadedddddd');
   const [volumeon, setVolumeon] = useState(true);
 
   const [index, setIndex] = useState(0);
-
   const aspect_ratios = ['contain', 'stretch', 'cover'];
   const [aspect, setAspect] = useState(aspect_ratios[index]);
 
@@ -113,26 +113,27 @@ const VideoUpload = props => {
             <>
               <View style={styles.videocontainer}>
                 <Video
-                  ref={ref => (videoPlayer.current = ref)}
                   source={{uri: uploadvideo[0].uri}}
                   style={styles.backgroundVideo}
                   resizeMode={aspect}
                   volume={volumeon ? 1.0 : 0.0}
-                  // onLoad={data => {
-                  //   console.log(data.duration);
-                  // }}
-                  paused={pause}
-                  onProgress={data => {
-                    if (data.currentTime > time) {
-                      setPause(true);
+                  onLoad={data => {
+                    setDuration(data.duration);
+                    if (data.duration < 30) {
+                      setTime(data.duration);
+                    }
+                    if (data.duration > 30) {
+                      setTime(10);
                     }
                   }}
+                  // paused={pause}
+                  // onProgress={data => {
+                  //   if (data.currentTime > time) {
+                  //     setPause(true);
+                  //   }
+                  // }}
                 />
-                <View style={{marginTop: 2}}>
-                  <Text style={{color: 'gray', fontSize: 15}}>
-                    Change Aspect Ratio*
-                  </Text>
-                </View>
+
                 <TouchableOpacity
                   onPress={() => {
                     changeaspect();
@@ -172,7 +173,25 @@ const VideoUpload = props => {
                   </View>
                 </TouchableOpacity>
               </View>
-              <View style={{marginTop: 30}}>
+              <View style={{marginTop: 2}}>
+                <Text style={{color: 'gray', fontSize: 15}}>
+                  Change Aspect Ratio*
+                </Text>
+              </View>
+              <View style={{marginTop: 2}}>
+                {duration < 30 && (
+                  <Text style={{color: 'gray', fontSize: 15}}>
+                    You are good to Go Video Duration is {duration} Sec , less
+                    Than 30 Sec
+                  </Text>
+                )}
+                {duration > 30 && (
+                  <Text style={{color: 'gray', fontSize: 15}}>
+                    The Video is Greater than 30 sec
+                  </Text>
+                )}
+              </View>
+              <View style={{marginTop: 25}}>
                 <Button
                   text="Proceed"
                   color="#6C63FF"
