@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,6 +14,13 @@ import Icons1 from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modals from '../components/Modals';
 import Button from '../components/Button';
 import Video from 'react-native-video';
+import Slider from 'rn-range-slider';
+
+import Thumb from '../components/gesture/Thumb';
+import Rail from '../components/gesture/Rail';
+import RailSelected from '../components/gesture/RailSelected';
+import Label from '../components/gesture/Label';
+import Notch from '../components/gesture/Notch';
 
 const VideoUpload = props => {
   const [uploadvideo, setUploadvideo] = useState([]);
@@ -22,12 +29,20 @@ const VideoUpload = props => {
   const [pause, setPause] = useState(false);
   const [duration, setDuration] = useState(0);
   console.log(duration, time);
-  // console.log(uploadvideo, 'uploadedddddd');
   const [volumeon, setVolumeon] = useState(true);
 
   const [index, setIndex] = useState(0);
   const aspect_ratios = ['contain', 'stretch', 'cover'];
   const [aspect, setAspect] = useState(aspect_ratios[index]);
+
+  const renderThumb = useCallback(() => <Thumb />, []);
+  const renderRail = useCallback(() => <Rail />, []);
+  const renderRailSelected = useCallback(() => <RailSelected />, []);
+  const renderLabel = useCallback(value => <Label text={value} />, []);
+  const renderNotch = useCallback(() => <Notch />, []);
+  const handleValueChange = useCallback((low, high) => {
+    setTime(low);
+  }, []);
 
   const changeaspect = () => {
     setIndex((index + 1) % aspect_ratios.length);
@@ -53,7 +68,6 @@ const VideoUpload = props => {
             } else if (response.customButton) {
               reject(response);
             } else {
-              console.log(response, 'response');
               const source = {
                 uri: response.assets[0].uri,
                 type: 'video',
@@ -122,16 +136,7 @@ const VideoUpload = props => {
                     if (data.duration < 30) {
                       setTime(data.duration);
                     }
-                    if (data.duration > 30) {
-                      setTime(10);
-                    }
                   }}
-                  // paused={pause}
-                  // onProgress={data => {
-                  //   if (data.currentTime > time) {
-                  //     setPause(true);
-                  //   }
-                  // }}
                 />
 
                 <TouchableOpacity
@@ -186,9 +191,54 @@ const VideoUpload = props => {
                   </Text>
                 )}
                 {duration > 30 && (
-                  <Text style={{color: 'gray', fontSize: 15}}>
-                    The Video is Greater than 30 sec
-                  </Text>
+                  <>
+                    <Text style={{color: 'gray', fontSize: 15}}>
+                      The Video Duration {duration}sec and is Greater than 30
+                      sec, can crop between 10 to 30 sec to move forward
+                    </Text>
+                    <View style={styles.slidercontainer}>
+                      <Slider
+                        min={10}
+                        max={30}
+                        step={1}
+                        disableRange={true}
+                        floatingLabel
+                        renderThumb={renderThumb}
+                        renderRail={renderRail}
+                        renderRailSelected={renderRailSelected}
+                        renderLabel={renderLabel}
+                        renderNotch={renderNotch}
+                        onValueChanged={handleValueChange}
+                      />
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          padding: 10,
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 10,
+                            fontWeight: 'bold',
+                            color: '#000',
+                          }}>
+                          10(sec)
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 10,
+                            fontWeight: 'bold',
+                            color: '#000',
+                          }}>
+                          30
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{justifyContent: 'center', alignItems: 'center'}}>
+                      <Text style={styles.textcolor}>Croped : {time} Sec</Text>
+                    </View>
+                  </>
                 )}
               </View>
               <View style={{marginTop: 25}}>
@@ -237,6 +287,7 @@ const styles = StyleSheet.create({
   },
   margincontainer: {
     marginHorizontal: 15,
+    marginBottom: 20,
   },
   heading: {
     color: '#000',
@@ -257,5 +308,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 10,
+  },
+  slidercontainer: {
+    elevation: 2,
+    borderRadius: 1,
+    marginTop: 20,
+    marginBottom: 10,
+    padding: 10,
+    marginHorizontal: 10,
   },
 });
