@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {request, RESULTS, PERMISSIONS} from 'react-native-permissions';
 import Icons from 'react-native-vector-icons/Ionicons';
 import Icons1 from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modals from '../components/Modals';
@@ -60,21 +61,33 @@ const VideoUpload = props => {
       };
       {
         Platform.OS === 'android' &&
-          launchImageLibrary(options, response => {
-            if (response.didCancel) {
-              reject(response);
-            } else if (response.error) {
-              reject(response);
-            } else if (response.customButton) {
-              reject(response);
-            } else {
-              const source = {
-                uri: response.assets[0].uri,
-                type: 'video',
-                name: response.assets[0].fileName + '.mp4',
-                filename: response.assets[0].fileName + '.mp4',
-              };
-              resolve(source);
+          request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE).then(result => {
+            switch (result) {
+              case RESULTS.UNAVAILABLE:
+                break;
+              case RESULTS.DENIED:
+                break;
+              case RESULTS.GRANTED:
+                launchImageLibrary(options, response => {
+                  if (response.didCancel) {
+                    reject(response);
+                  } else if (response.error) {
+                    reject(response);
+                  } else if (response.customButton) {
+                    reject(response);
+                  } else {
+                    const source = {
+                      uri: response.assets[0].uri,
+                      type: 'video',
+                      name: response.assets[0].fileName + '.mp4',
+                      filename: response.assets[0].fileName + '.mp4',
+                    };
+                    resolve(source);
+                  }
+                });
+                break;
+              case RESULTS.BLOCKED:
+                break;
             }
           });
       }
