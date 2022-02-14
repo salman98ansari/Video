@@ -33,7 +33,7 @@ const VideoShow = props => {
             repeat
             resizeMode={aspect}
             volume={volumeon ? 1.0 : 0.0}
-            // paused={pause}
+            // paused={pause}ss
             onProgress={data => {
               if (data.currentTime > times) {
                 // setPause(true);
